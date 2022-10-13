@@ -19,7 +19,6 @@ public class ProductConfigurationProperties {
     private Chains chains;
     private Events events;
     private Cursor cursor;
-    private BatchProductGroupTask.IngestionMode ingestionMode = BatchProductGroupTask.IngestionMode.UPDATE;
 
     @Data
     @NoArgsConstructor
