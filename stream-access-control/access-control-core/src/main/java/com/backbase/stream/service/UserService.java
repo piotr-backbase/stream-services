@@ -287,6 +287,7 @@ public class UserService {
             .map(identityCreatedItem -> {
                 user.setInternalId(identityCreatedItem.getInternalId());
                 user.setExternalId(identityCreatedItem.getExternalId());
+                user.setLegalEntityId(legalEntityInternalId);
                 return user;
             })
             .flatMap(newUser -> this.updateIdentityUserAttributes(user, streamTask))
