@@ -66,6 +66,7 @@
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
+      <version>4.13.0</version>
     </dependency>
 
     <!-- Test dependencies -->

@@ -14,7 +14,7 @@ spring:
     allow-bean-definition-overriding: true
   liquibase:
     enabled: true
-    change-log: db/changelog/db.changelog-persistence.xml
+    change-log:
 
 
 backbase:
