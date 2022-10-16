@@ -14,8 +14,6 @@ spring:
     allow-bean-definition-overriding: true
   liquibase:
     enabled: true
-    change-log:
-
 
 backbase:
   stream:
