@@ -42,7 +42,10 @@
       <artifactId>transaction-cursor-api</artifactId>
       <version>${project.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.backbase.buildingblocks</groupId>
+      <artifactId>auxiliary-config</artifactId>
+    </dependency>
     <dependency>
       <groupId>com.backbase.stream</groupId>
       <artifactId>stream-dbs-web-client</artifactId>
