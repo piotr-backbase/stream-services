@@ -12,7 +12,6 @@ spring:
     enabled: false
   main:
     allow-bean-definition-overriding: true
-    web-application-type: reactive
   liquibase:
     enabled: true
 
