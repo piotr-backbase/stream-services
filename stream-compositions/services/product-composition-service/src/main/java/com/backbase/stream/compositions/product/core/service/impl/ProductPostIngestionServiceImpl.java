@@ -102,6 +102,10 @@ public class ProductPostIngestionServiceImpl implements ProductPostIngestionServ
     }
 
     private Mono<ProductIngestResponse> ingestTransactions(ProductIngestResponse res) {
+        if (res.getProductGroups() == null) {
+            return Mono.just(res);
+        }
+
         return extractProducts(res.getProductGroups())
                 .map(product -> buildTransactionPullRequest(product, res))
                 .flatMap(transactionCompositionApi::pullTransactions)
@@ -126,6 +130,10 @@ public class ProductPostIngestionServiceImpl implements ProductPostIngestionServ
     }
 
     private Mono<ProductIngestResponse> ingestTransactionsAsync(ProductIngestResponse res) {
+        if (res.getProductGroups() == null) {
+            return Mono.just(res);
+        }
+
         return extractProducts(res.getProductGroups())
                 .map(product -> buildTransactionPullRequest(product, res))
                 .doOnNext(request -> transactionCompositionApi.pullTransactions(request).subscribe())
