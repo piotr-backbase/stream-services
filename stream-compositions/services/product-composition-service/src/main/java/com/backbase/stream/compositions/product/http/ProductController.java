@@ -87,7 +87,7 @@ public class ProductController implements ProductCompositionApi {
         return new ResponseEntity<>(
                 new ProductIngestionResponse()
                         .withProductGroups(
-                                response.getProductGroups() == null ?
+                                response.getProductGroups() != null ?
                                         response.getProductGroups().stream()
                                                 .map(group -> mapper.mapStreamToComposition(group))
                                                 .collect(Collectors.toList()) : null),
