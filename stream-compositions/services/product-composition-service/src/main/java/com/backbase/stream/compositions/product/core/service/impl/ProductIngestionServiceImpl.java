@@ -101,7 +101,7 @@ public class ProductIngestionServiceImpl implements ProductIngestionService {
     private Mono<ProductIngestResponse> sendToDbs(ProductIngestResponse res) {
         if (res.getProductGroups() == null || res.getProductGroups().isEmpty()) {
             log.info("No product groups. Skipping ingestion.");
-            return Mono.empty();
+            return Mono.just(ProductIngestResponse.builder().build());
         }
 
         return batchProductIngestionSaga.process(buildBatchTask(res))
