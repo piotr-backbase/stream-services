@@ -1,40 +1,15 @@
 package com.backbase.stream.service;
 
-import static com.backbase.dbs.accesscontrol.api.service.v2.model.BatchResponseItemExtended.StatusEnum.HTTP_STATUS_OK;
-import static com.backbase.stream.legalentity.model.ServiceAgreementUserAction.ActionEnum.ADD;
-import static com.backbase.stream.legalentity.model.ServiceAgreementUserAction.ActionEnum.REMOVE;
-import static org.springframework.util.StringUtils.isEmpty;
-
-import com.backbase.dbs.accesscontrol.api.service.v2.DataGroupApi;
-import com.backbase.dbs.accesscontrol.api.service.v2.DataGroupsApi;
-import com.backbase.dbs.accesscontrol.api.service.v2.FunctionGroupApi;
-import com.backbase.dbs.accesscontrol.api.service.v2.FunctionGroupsApi;
-import com.backbase.dbs.accesscontrol.api.service.v2.ServiceAgreementApi;
-import com.backbase.dbs.accesscontrol.api.service.v2.ServiceAgreementQueryApi;
-import com.backbase.dbs.accesscontrol.api.service.v2.ServiceAgreementsApi;
-import com.backbase.dbs.accesscontrol.api.service.v2.UserQueryApi;
-import com.backbase.dbs.accesscontrol.api.service.v2.UsersApi;
+import com.backbase.dbs.accesscontrol.api.service.v2.*;
 import com.backbase.dbs.accesscontrol.api.service.v2.model.*;
 import com.backbase.dbs.user.api.service.v2.UserManagementApi;
 import com.backbase.dbs.user.api.service.v2.model.GetUser;
 import com.backbase.stream.config.BackbaseStreamConfigurationProperties;
 import com.backbase.stream.config.BackbaseStreamConfigurationProperties.DeletionProperties.FunctionGroupItemType;
 import com.backbase.stream.legalentity.model.ApprovalStatus;
-import com.backbase.stream.legalentity.model.AssignedPermission;
-import com.backbase.stream.legalentity.model.BaseProductGroup;
-import com.backbase.stream.legalentity.model.BusinessFunction;
-import com.backbase.stream.legalentity.model.BusinessFunctionGroup;
-import com.backbase.stream.legalentity.model.BusinessFunctionGroup.TypeEnum;
-import com.backbase.stream.legalentity.model.JobProfileUser;
-import com.backbase.stream.legalentity.model.JobRole;
-import com.backbase.stream.legalentity.model.LegalEntity;
-import com.backbase.stream.legalentity.model.LegalEntityParticipant;
+import com.backbase.stream.legalentity.model.*;
 import com.backbase.stream.legalentity.model.Privilege;
-import com.backbase.stream.legalentity.model.ProductGroup;
-import com.backbase.stream.legalentity.model.ReferenceJobRole;
-import com.backbase.stream.legalentity.model.ServiceAgreement;
-import com.backbase.stream.legalentity.model.ServiceAgreementUserAction;
-import com.backbase.stream.legalentity.model.User;
+import com.backbase.stream.legalentity.model.BusinessFunctionGroup.TypeEnum;
 import com.backbase.stream.mapper.AccessGroupMapper;
 import com.backbase.stream.mapper.ParticipantMapper;
 import com.backbase.stream.product.task.BatchProductGroupTask;
@@ -43,24 +18,6 @@ import com.backbase.stream.product.utils.BatchResponseUtils;
 import com.backbase.stream.product.utils.StreamUtils;
 import com.backbase.stream.worker.exception.StreamTaskException;
 import com.backbase.stream.worker.model.StreamTask;
-import java.math.BigDecimal;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +29,19 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.backbase.dbs.accesscontrol.api.service.v2.model.BatchResponseItemExtended.StatusEnum.HTTP_STATUS_OK;
+import static com.backbase.stream.legalentity.model.ServiceAgreementUserAction.ActionEnum.ADD;
+import static com.backbase.stream.legalentity.model.ServiceAgreementUserAction.ActionEnum.REMOVE;
+import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * Access Group Service provide access to Access Control, Data Groups and Function Groups from a single service.
@@ -750,6 +720,7 @@ public class AccessGroupService {
             affectedArrangements.addAll(existingDataGroups.stream()
                 .map(DataGroupItem::getItems)
                 .flatMap(List::stream)
+                .filter(item -> !item.contains("template"))
                 .collect(Collectors.toSet())
             );
         }
