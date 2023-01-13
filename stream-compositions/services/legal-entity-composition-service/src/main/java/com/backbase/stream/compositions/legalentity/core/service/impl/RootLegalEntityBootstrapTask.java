@@ -27,7 +27,7 @@ public class RootLegalEntityBootstrapTask implements ApplicationRunner {
     private final LegalEntitySaga legalEntitySaga;
     private final BootstrapConfigurationProperties bootstrapConfigurationProperties;
 
-    @Value("${restart-service-if-fails}")
+    @Value("${backbase.stream.compositions.legal-entity.bootstrap.restart-service-if-fails}")
     private Boolean restartServiceIfFails;
 
     @Override
