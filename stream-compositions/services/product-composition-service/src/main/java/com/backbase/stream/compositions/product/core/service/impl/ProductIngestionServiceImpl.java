@@ -99,10 +99,10 @@ public class ProductIngestionServiceImpl implements ProductIngestionService {
      * @return Ingested product group
      */
     private Mono<ProductIngestResponse> sendToDbs(ProductIngestResponse res) {
-        if (res.getProductGroups() == null || res.getProductGroups().isEmpty()) {
-            log.info("No product groups. Skipping ingestion.");
-            return Mono.just(ProductIngestResponse.builder().build());
-        }
+//        if (res.getProductGroups() == null || res.getProductGroups().isEmpty()) {
+//            log.info("No product groups. Skipping ingestion.");
+//            return Mono.just(ProductIngestResponse.builder().build());
+//        }
 
         return batchProductIngestionSaga.process(buildBatchTask(res))
                 .map(BatchProductGroupTask::getData)
@@ -127,6 +127,11 @@ public class ProductIngestionServiceImpl implements ProductIngestionService {
     }
 
     private Mono<ProductIngestResponse> validate(ProductIngestResponse res) {
+        if (res.getProductGroups() == null || res.getProductGroups().isEmpty()) {
+            log.info("No product groups. Skipping ingestion.");
+            return Mono.empty();
+        }
+
         Set<ConstraintViolation<List<ProductGroup>>> violations = validator.validate(res.getProductGroups());
 
         if (!CollectionUtils.isEmpty(violations)) {
