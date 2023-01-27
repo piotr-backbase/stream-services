@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,13 +27,14 @@ public class RootLegalEntityBootstrapTask implements ApplicationRunner {
     private final LegalEntitySaga legalEntitySaga;
     private final BootstrapConfigurationProperties bootstrapConfigurationProperties;
 
+    @Value("${backbase.stream.compositions.legal-entity.bootstrap.restart-service-if-fails}")
+    private Boolean restartServiceIfFails;
+
     @Override
     public void run(ApplicationArguments args) {
         LegalEntity rootLegalEntity = bootstrapConfigurationProperties.getLegalEntity();
         bootstrapRootLegalEntity(rootLegalEntity)
                 .subscribe();
-
-
     }
 
     private Mono<String> bootstrapRootLegalEntity(LegalEntity rootLegalEntity) {
@@ -44,7 +46,12 @@ public class RootLegalEntityBootstrapTask implements ApplicationRunner {
 
             return legalEntitySaga.executeTask(new LegalEntityTask(rootLegalEntity))
                     .map(task -> task.getData().getInternalId())
-                    .doOnError(Exception.class, e -> log.error("Failed to bootstrap root legal entity.", e))
+                    .doOnError(Exception.class, e -> {
+                        log.error("Failed to bootstrap root legal entity.", e);
+                        if (restartServiceIfFails) {
+                            System.exit(0);
+                        }
+                    })
                     .doOnSuccess(result -> log
                             .info("Root legal entity bootstrapping complete. Internal ID: {}.", result));
         }

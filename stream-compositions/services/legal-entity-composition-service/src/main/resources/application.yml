@@ -24,6 +24,8 @@ backbase:
       identity-integration-base-url: http://identity-integration-service:8080
     compositions:
       legal-entity:
+        bootstrap:
+          restart-service-if-fails: false
         integration-base-url: http://legal-entity-integration:8080
         chains:
           product-composition:
