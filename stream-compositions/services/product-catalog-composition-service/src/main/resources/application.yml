@@ -3,6 +3,10 @@ spring:
     enabled: false
   main:
     allow-bean-definition-overriding: true
+  cloud:
+    stream:
+      bindings[com.backbase.stream.compositions.events.ingress.event.spec.v1.productcatalogingestpushevent].group": product-catalog.IngestPushEvent
+
 backbase:
   mtls:
     enabled: false

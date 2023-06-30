@@ -730,6 +730,8 @@ public class LegalEntitySaga implements StreamTaskExecutor<LegalEntityTask> {
         Mono<User> getExistingIdentityUser = userService.getUserByExternalId(user.getExternalId())
             .map(existingUser -> {
                 user.setInternalId(existingUser.getInternalId());
+                existingUser.setAdditions(user.getAdditions());
+                userService.updateUser(existingUser).block();
                 streamTask.info(IDENTITY_USER, UPSERT, EXISTS, user.getExternalId(), user.getInternalId(), "User %s already exists", existingUser.getExternalId());
                 return user;
             })

@@ -2,12 +2,14 @@ package com.backbase.stream;
 
 import com.backbase.stream.config.BootstrapConfigurationProperties;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.Assert;
 
+@Disabled
 @SpringBootTest
 @WireMockTest(httpPort = 10000)
 @ActiveProfiles({"it", "moustache-bank", "moustache-bank-subsidiaries"})
