@@ -734,6 +734,7 @@ public class LegalEntitySaga implements StreamTaskExecutor<LegalEntityTask> {
                 return user;
             })
                 .flatMap(existingUser -> {
+                    existingUser.setAdditions(user.getAdditions());
                     existingUser.setLegalEntityId(legalEntity.getInternalId());
                     return userService.updateUser(existingUser);
                 });
